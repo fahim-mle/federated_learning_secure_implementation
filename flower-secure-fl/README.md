@@ -27,6 +27,19 @@ Follow this [how-to guide](https://flower.ai/docs/framework/how-to-run-flower-wi
 
 You can run Flower on Docker too! Check out the [Flower with Docker](https://flower.ai/docs/framework/docker/index.html) documentation.
 
+## TLS-Enabled SuperLink
+
+Once the TLS certificates are generated under `flower-secure-fl/certificates`, start SuperLink with TLS enabled:
+
+```bash
+flower-superlink \
+  --ssl-ca-certfile certificates/ca/ca.crt \
+  --ssl-certfile certificates/superlink/superlink.crt \
+  --ssl-keyfile certificates/superlink/superlink.key
+```
+
+If you are using the local virtual environment created with `python3 -m venv .venv`, prefix the command with `.venv/bin/` or export `PATH` so that the Flower CLIs are resolved from `.venv/bin`.
+
 ## Resources
 
 - Flower website: [flower.ai](https://flower.ai/)
