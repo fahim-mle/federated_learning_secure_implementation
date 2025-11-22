@@ -41,7 +41,7 @@
 
   ```toml
   [tool.flwr.federations.remote-federation]
-  address = "127.0.0.1:9091"
+  address = "127.0.0.1:9093"
   root-certificates = "./certificates/ca/ca.crt"
   ```
 
@@ -51,7 +51,7 @@
 **Expected result:**
 
 * The section now reads exactly as above.
-* `address` uses `127.0.0.1:9091` (or your intended SuperLink address).
+* `address` uses `127.0.0.1:9093` (the SuperLink Control API, or your intended address).
 * `root-certificates` is present and correct relative path.
 * `insecure = true` line is removed or commented.
 
@@ -113,13 +113,16 @@ flower-superlink \
 * Logs include:
 
   ```
-  INFO: TLS enabled
+  INFO: Starting Flower SuperLink
   INFO: Using CA certificate: certificates/ca/ca.crt
   INFO: Using certificate: certificates/superlink/superlink.crt
   INFO: Using private key: certificates/superlink/superlink.key
+  INFO: Flower Deployment Runtime: Starting Control API on 0.0.0.0:9093
+  INFO: Flower Deployment Runtime: Starting Fleet API (gRPC-rere) on 0.0.0.0:9092
+  INFO: Flower Deployment Runtime: Starting ServerAppIo API on 0.0.0.0:9091
   ```
 
-* No errors like “invalid certificate” or “failed to load key”.
+* No errors like “invalid certificate” or “failed to load key”. TLS applies to the Control (9093) and Fleet (9092) endpoints; ServerAppIo (9091) currently remains plaintext.
 
 ---
 
@@ -128,9 +131,9 @@ flower-superlink \
 **Instruction:**
 Run:
 
-```bash
-openssl s_client -connect 127.0.0.1:9091 -CAfile certificates/ca/ca.crt </dev/null
-```
+  ```bash
+  openssl s_client -connect 127.0.0.1:9093 -CAfile certificates/ca/ca.crt </dev/null
+  ```
 
 **Expected result:**
 

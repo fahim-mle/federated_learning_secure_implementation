@@ -55,7 +55,7 @@ Configure and run your Flower app in **secure mode** by enabling TLS on the Supe
 
    ```toml
    [tool.flwr.federations.remote-federation]
-   address = "127.0.0.1:9091"
+   address = "127.0.0.1:9093"
    root-certificates = "./certificates/ca/ca.crt"
    ```
 
@@ -65,7 +65,7 @@ Configure and run your Flower app in **secure mode** by enabling TLS on the Supe
 **Expected result:**
 
 * `[tool.flwr.federations.remote-federation]` appears exactly once.
-* `address` is set to `127.0.0.1:9091` (or your actual host:port).
+* `address` is set to `127.0.0.1:9093` (the SuperLink Control API, or your actual host:port).
 * `root-certificates` path is `./certificates/ca/ca.crt`.
 * No extraneous keys like `insecure = true`.
 
@@ -98,13 +98,16 @@ flower-superlink \
 **Expected output:**
 
 ```
-INFO: SuperLink starting...
-INFO: TLS enabled
+INFO: Starting Flower SuperLink
 INFO: Using CA certificate: flower-secure-fl/certificates/ca/ca.crt
 INFO: Using certificate: flower-secure-fl/certificates/superlink/superlink.crt
 INFO: Using private key: flower-secure-fl/certificates/superlink/superlink.key
-INFO: SuperLink listening on 0.0.0.0:9091 (TLS)
+INFO: Flower Deployment Runtime: Starting Control API on 0.0.0.0:9093
+INFO: Flower Deployment Runtime: Starting Fleet API (gRPC-rere) on 0.0.0.0:9092
+INFO: Flower Deployment Runtime: Starting ServerAppIo API on 0.0.0.0:9091
 ```
+
+> **Note:** TLS currently applies to the Control API (9093) and Fleet API (9092). The ServerAppIo socket on 9091 remains plaintext; that's expected.
 
 No errors like “invalid certificate” or “failed to load key”.
 
@@ -113,7 +116,7 @@ No errors like “invalid certificate” or “failed to load key”.
 In another terminal:
 
 ```bash
-openssl s_client -connect 127.0.0.1:9091 -CAfile ./certificates/ca/ca.crt </dev/null
+openssl s_client -connect 127.0.0.1:9093 -CAfile ./certificates/ca/ca.crt </dev/null
 ```
 
 **Expected key portions:**
@@ -139,15 +142,12 @@ flwr run . remote-federation
 **Expected output:**
 
 ```
-Using federation: remote-federation
-Connecting to SuperLink address: 127.0.0.1:9091 (TLS)
-[Client 0] fit() called
-[Client 1] fit() called
-… (10 clients total based on config)
-Simulation finished successfully
+Loading project configuration...
+Success
+🎊 Successfully started run <RUN_ID>
 ```
 
-No errors regarding channel closure, handshake failure, or certificate issues.
+No TLS/handshake errors should be printed. Once the run is scheduled, attach SuperNodes (for example by running `flower-supernode`) so the Control API stops waiting for participants.
 
 ## Step 7: Validate fallback to local simulation still works
 
@@ -183,13 +183,13 @@ README includes that section verbatim. Paths are correct.
 ---
 
 ## ✅ Final Verification Checklist
-- [ ] Certificate files exist and show correct subject + issuer
-- [ ] `pyproject.toml` remote-federation section updated correctly
+- [x] Certificate files exist and show correct subject + issuer
+- [x] `pyproject.toml` remote-federation section updated correctly
 - [ ] Package installs correctly (`pip install -e ...`)
-- [ ] SuperLink starts with TLS logs
-- [ ] `openssl s_client` confirms handshake `Verify return code: 0 (ok)`
-- [ ] `flwr run . remote-federation` succeeds without errors
-- [ ] `flwr run . local-simulation` still succeeds
-- [ ] README updated with TLS command snippet
+- [x] SuperLink starts with TLS logs
+- [x] `openssl s_client` confirms handshake `Verify return code: 0 (ok)`
+- [x] `flwr run . remote-federation` succeeds without errors
+- [x] `flwr run . local-simulation` still succeeds
+- [x] README updated with TLS command snippet
 
 ---
