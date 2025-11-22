@@ -52,3 +52,17 @@ htmlcov/
 
 # models
 *.pt
+
+# pdf files
+*.pdf
+
+# certificates
+*.pem
+*.key
+*.crt
+*.cert
+*.csr
+*.der
+*.pfx
+*.p12
+*.srl
