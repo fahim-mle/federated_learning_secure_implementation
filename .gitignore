@@ -68,6 +68,7 @@ htmlcov/
 *.srl
 *.pub
 *_auth
+*.ext
 
 # logs
 *.log
