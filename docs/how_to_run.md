@@ -23,8 +23,7 @@ This guide summarizes the exact commands needed to run the Flower app in both TL
 From `flower-secure-fl/` (where the certificates folder lives), start SuperLink with TLS:
 
 ```bash
-PATH="$(pwd)/.venv/bin:$PATH" \
-.venv/bin/flower-superlink \
+flower-superlink \
   --ssl-ca-certfile ./certificates/ca/ca.crt \
   --ssl-certfile ./certificates/superlink/superlink.crt \
   --ssl-keyfile ./certificates/superlink/superlink.key
@@ -51,8 +50,7 @@ Look for `verify return code: 0 (ok)` and the SuperLink certificate details.
 In another terminal (venv active) from `flower-secure-fl/`:
 
 ```bash
-PATH="$(pwd)/.venv/bin:$PATH"
-.venv/bin/flwr run . remote-federation
+flwr run . remote-federation
 ```
 
 Successful output:
@@ -68,12 +66,11 @@ Leave the command running; SuperLink will now wait for SuperNodes to attach. If 
 Still from `flower-secure-fl/`:
 
 ```bash
-PATH="$(pwd)/.venv/bin:$PATH" \
-.venv/bin/flwr run . local-simulation
+flwr run . local-simulation
 ```
 
 You should see the standard three FedAvg rounds complete with aggregated metrics, confirming that the simulation configuration still works alongside the secure federation setup.
 
 ## Notes
 - Always run these commands with the SuperLink process active; stop it with `Ctrl+C` or `kill <PID>` when done.
-- If `pip install -e flower-secure-fl/` fails to fetch build requirements due to restricted networking, ensure the package already shows up in `.venv/bin/pip list`. The editable install only needs to succeed once per environment.
+- If `pip install -e flower-secure-fl/` fails to fetch build requirements due to restricted networking, ensure the package already shows up in `pip list` from within the venv. The editable install only needs to succeed once per environment.
