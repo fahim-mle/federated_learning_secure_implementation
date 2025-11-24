@@ -1,0 +1,14 @@
+[Unit]
+Description=JupyterHub Service (Secure Access Layer)
+After=network.target
+
+[Service]
+User=jupyterhub
+Group=jupyterhub
+Type=simple
+ExecStart=/opt/jupyterhub/venv/bin/jupyterhub -f /home/ghost/workspace/internship_project/federated_learning_secure_implementation/secure-access-layer/jupyterhub/conf/jupyterhub_config.py
+Restart=on-failure
+WorkingDirectory=/opt/jupyterhub
+
+[Install]
+WantedBy=multi-user.target
