@@ -1,0 +1,20 @@
+[Unit]
+Description=Keycloak Service (Secure Access Layer)
+After=network.target
+
+[Service]
+User=keycloak
+Group=keycloak
+Type=simple
+ExecStart=/opt/keycloak/bin/kc.sh start \
+  --hostname=keycloak.internal \
+  --https-certificate-file=/opt/keycloak/certs/keycloak.internal.crt \
+  --https-certificate-key-file=/opt/keycloak/certs/keycloak.internal.key \
+  --https-port=8443 \
+  --proxy-headers=xforwarded
+Restart=on-failure
+Environment=KEYCLOAK_ADMIN=admin
+Environment=KEYCLOAK_ADMIN_PASSWORD=admin
+
+[Install]
+WantedBy=multi-user.target
